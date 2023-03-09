@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from typing import Union
+import os
 
 app = FastAPI()
 
@@ -9,4 +9,9 @@ def test():
 
 @app.get("/ping")
 def ping(ip: str):
-    print("ping to:", ip)
+  print("ping to:", ip)
+  response = os.system("ping -n 1 " + ip + "> nul")
+  if response == 0:
+    print("Success")
+  else:
+    print("Error")
