@@ -1,7 +1,18 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import os
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/test")
 def test():
@@ -15,4 +26,5 @@ def ping(ip: str):
     print("Success")
   else:
     print("Error")
-  return "<h1>Hola"+str(response)+"</h1>"
+  
+  return {"operation": "ping", "status":response}

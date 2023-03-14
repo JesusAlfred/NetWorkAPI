@@ -6,19 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TestAPI</title>
   <script>
-    function send(x)
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", x);
-    xhr.send();
-    xhr.responseType = "json";
-    xhr.onload = () => {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        const data = xhr.response;
-        console.log(data);
-      } else {
-        console.log(`Error: ${xhr.status}`);
-      }
-    };
+    function send(x){
+      console.log("procesando...");
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", x);
+      xhr.send();
+      xhr.responseType = "json";
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          const data = xhr.response;
+          console.log("response");
+          console.log(data);
+        } else {
+          console.log(`Error: ${xhr.status}`);
+        }
+      };
+    }
   </script>
 </head>
 <body>
