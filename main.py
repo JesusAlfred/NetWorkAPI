@@ -15,4 +15,4 @@ def ping(ip: str):
     print("Success")
   else:
     print("Error")
-  return "<h1>Hola"+response+"</h1>"
+  return "<h1>Hola"+str(response)+"</h1>"
