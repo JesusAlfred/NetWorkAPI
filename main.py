@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import sshLib
+import uvicorn
 
 sshObj = None
 
@@ -55,3 +56,7 @@ def sendCommand(commad: str):
   responce['operation'] = 'sendCommand'
   responce['msg'] = sshObj.sendCommand(commad)
   return responce
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, host="192.168.0.137", port=8000)
