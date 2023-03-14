@@ -50,6 +50,7 @@ def startConnection(ip: str, user: str, password: str):
 
 @app.get("/sendCommand")
 def sendCommand(commad: str):
+  commad = commad.replace('-', ' ')
   responce = {}
   responce['operation'] = 'sendCommand'
   responce['msg'] = sshObj.sendCommand(commad)
