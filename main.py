@@ -10,8 +10,9 @@ def test():
 @app.get("/ping")
 def ping(ip: str):
   print("ping to:", ip)
-  response = os.system("ping -n 1 " + ip + "> nul")
+  response = os.system("ping -n 1 -w 1000 " + ip + "> nul")
   if response == 0:
     print("Success")
   else:
     print("Error")
+  return 
