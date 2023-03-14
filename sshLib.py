@@ -52,3 +52,6 @@ class SSHController:
         output += temp_output
         print(temp_output, end="")
       return output
+    
+    def endConnection(self):
+     self.ssh.close()

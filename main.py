@@ -4,8 +4,6 @@ import os
 import sshLib
 import uvicorn
 
-sshObj = None
-
 app = FastAPI()
 
 origins = ["*"]
@@ -36,6 +34,7 @@ def ping(ip: str):
 #@app.post("/startConnection") temporaly get
 @app.get("/startConnection")
 def startConnection(ip: str, user: str, password: str):
+  global sshObj
   responce = {}
   responce['operation'] = 'startConnection'
   sshObj = sshLib.SSHController(ip, user, password)
@@ -46,8 +45,7 @@ def startConnection(ip: str, user: str, password: str):
   sshObj.sendCommand("enable\n")
   sshObj.sendCommand("pass\n")
   sshObj.sendCommand("terminal lengt 0\n")
-  r = sshObj.sendCommand("show runn\n")
-  responce['msg'] = r
+  responce['msg'] = "none"
   return responce
 
 @app.get("/sendCommand")
@@ -56,6 +54,10 @@ def sendCommand(commad: str):
   responce['operation'] = 'sendCommand'
   responce['msg'] = sshObj.sendCommand(commad)
   return responce
+
+@app.get("/endConnection")
+def endConnection():
+  sshObj.endConnection()
 
 
 if __name__ == '__main__':
