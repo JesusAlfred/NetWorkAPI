@@ -40,6 +40,9 @@ def startConnection(ip: str, user: str, password: str):
     responce['msg'] = "Error on connection"
     return responce
   
-  r = sshObj.sendCommand("show runn")
+  sshObj.sendCommand("enable\n")
+  sshObj.sendCommand("pass\n")
+  sshObj.sendCommand("terminal lengt 0\n")
+  r = sshObj.sendCommand("show runn\n")
   responce['msg'] = r
   return responce
