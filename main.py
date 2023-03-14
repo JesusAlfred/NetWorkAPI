@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import sshLib
 
+sshObj = None
+
 app = FastAPI()
 
 origins = ["*"]
@@ -46,3 +48,7 @@ def startConnection(ip: str, user: str, password: str):
   r = sshObj.sendCommand("show runn\n")
   responce['msg'] = r
   return responce
+
+@app.get("/sendCommand")
+def sendCommand(commad: str):
+  sshObj.sendCommand(commad)
