@@ -59,7 +59,7 @@ def sendCommand(c: Command):
   response = {}
   print(c.command)
   response['operation'] = 'sendCommand'
-  response['msg'] = sshObj.sendCommand(c.command, 4)
+  response['msg'] = sshObj.sendCommand(c.command)
   return response
 
 @app.get("/endConnection")
