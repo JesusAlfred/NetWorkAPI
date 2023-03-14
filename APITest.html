@@ -6,19 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TestAPI</title>
   <script>
+    const host = "http://localhost:8000/";
+    function ping(ip){
+      send(host + "ping?ip="+ip);
+    }
     function send(x){
-      console.log("procesando...");
       const xhr = new XMLHttpRequest();
       xhr.open("GET", x);
       xhr.send();
       xhr.responseType = "json";
+      xhr.onerror = function () {
+        console.log("** An error occurred during the transaction");
+      };
       xhr.onload = () => {
         if (xhr.status == 200) {
           const data = xhr.response;
-          console.log("response");
           console.log(data);
         } else {
-          console.log(`Error: ${xhr.status}`);
+          console.log("Error: "+xhr.status);
         }
       };
     }
