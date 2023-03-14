@@ -1,8 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import os
 import sshLib
 import uvicorn
+
+class Command(BaseModel):
+    command: str
 
 app = FastAPI()
 
@@ -35,28 +39,28 @@ def ping(ip: str):
 @app.get("/startConnection")
 def startConnection(ip: str, user: str, password: str):
   global sshObj
-  responce = {}
-  responce['operation'] = 'startConnection'
+  response = {}
+  response['operation'] = 'startConnection'
   sshObj = sshLib.SSHController(ip, user, password)
   if sshObj.startConection() == 1:
-    responce['msg'] = "Error on connection"
-    return responce
+    response['msg'] = "Error on connection"
+    return response
   
   sshObj.sendCommand("enable\n")
   sshObj.sendCommand("pass\n")
   sshObj.sendCommand("terminal lengt 0\n")
-  responce['msg'] = "none"
-  return responce
+  response['msg'] = "true"
+  return response
 
 @app.post("/sendCommand/")
-def sendCommand(commad: str):
+def sendCommand(c: Command):
   #commad = commad.replace('-', ' ')
-  commad = commad+'\n'
-  responce = {}
-  print(commad)
-  responce['operation'] = 'sendCommand'
-  responce['msg'] = sshObj.sendCommand(commad, 4)
-  return responce
+  c.command = c.command+'\n'
+  response = {}
+  print(c.command)
+  response['operation'] = 'sendCommand'
+  response['msg'] = sshObj.sendCommand(c.command, 4)
+  return response
 
 @app.get("/endConnection")
 def endConnection():
