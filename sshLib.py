@@ -2,7 +2,7 @@ import paramiko
 import time
 
 class SSHController:
-    def __init__(self, ip="", user="1", password="1"):
+    def __init__(self, ip="", user="1", password="p"):
       self.ip = ip
       self.user = user
       self.password = password  
@@ -21,6 +21,8 @@ class SSHController:
       except Exception as e:
         print("Error en connection")
         print(e)
+        return 1
+      return 0
 
     def sendCommand(self, command, timeout=1):
       self.remote_conn.settimeout(1)

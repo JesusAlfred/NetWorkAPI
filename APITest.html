@@ -10,6 +10,9 @@
     function ping(ip){
       send(host + "ping?ip="+ip);
     }
+    function startConnection(ip, user, password){
+      send(host + "startConnection?ip="+ip+"&user="+user+"&password="+password);
+    }
     function send(x){
       const xhr = new XMLHttpRequest();
       xhr.open("GET", x);

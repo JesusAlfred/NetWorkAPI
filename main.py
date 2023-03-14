@@ -36,7 +36,10 @@ def startConnection(ip: str, user: str, password: str):
   responce = {}
   responce['operation'] = 'startConnection'
   sshObj = sshLib.SSHController(ip, user, password)
-  sshObj.startConection()
-  r = sshObj.sendCommand("\n")
+  if sshObj.startConection() == 1:
+    responce['msg'] = "Error on connection"
+    return responce
+  
+  r = sshObj.sendCommand("")
   responce['msg'] = r
   return responce
