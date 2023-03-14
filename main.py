@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import sshLib
 
 app = FastAPI()
 
@@ -28,3 +29,14 @@ def ping(ip: str):
     print("Error")
   
   return {"operation": "ping", "status":response}
+
+#@app.post("/startConnection") temporaly get
+@app.get("/startConnection")
+def startConnection(ip: str, user: str, password: str):
+  responce = {}
+  responce['operation'] = 'startConnection'
+  sshObj = sshLib.SSHController(ip, user, password)
+  sshObj.startConection()
+  r = sshObj.sendCommand("\n")
+  responce['msg'] = r
+  return responce
