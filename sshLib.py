@@ -46,6 +46,7 @@ class SSHController:
       while True:
         try:
           temp_output = str(self.remote_conn.recv(1024), "utf-8")
+          print(temp_output)
         except Exception as e:
           #print("timeout")
           break
