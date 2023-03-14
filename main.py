@@ -67,5 +67,46 @@ def endConnection():
   sshObj.endConnection()
 
 
+import netifaces as ni
+import winreg as wr
+from pprint import pprint
+
+def get_connection_name_from_guid(iface_guids):
+  reg = wr.ConnectRegistry(None, wr.HKEY_LOCAL_MACHINE)
+  reg_key = wr.OpenKey(reg, r'SYSTEM\CurrentControlSet\Control\Network\{4d36e972-e325-11ce-bfc1-08002be10318}')
+  try:
+    reg_subkey = wr.OpenKey(reg_key, iface_guids + r'\Connection')
+    iface_name = wr.QueryValueEx(reg_subkey, 'Name')[0]
+    return iface_name
+  except FileNotFoundError:
+    return '(unknown)'
+    pass
+
+def toValidKey(s):
+  return s.replace(" ", "")
+
 if __name__ == '__main__':
-    uvicorn.run(app, host="192.168.0.137", port=8000)
+  import netifaces
+  interfaces = []
+  print("Select interface to run the API")
+  count = 0
+  for iface in netifaces.interfaces():
+    iface_details = netifaces.ifaddresses(iface)
+    if netifaces.AF_INET in iface_details:
+      interfaces.append({
+        'name': toValidKey(get_connection_name_from_guid(iface)),
+        'MAC': iface_details[-1000][0]['addr'],
+        'IPv4': iface_details[2][0]['addr'],
+        'IPv6': iface_details[23][0]['addr']
+      })
+      print(str(count) + ') ' + interfaces[count]['name'] + "\tip: " + interfaces[count]['IPv4'])
+      count+=1
+  selection = -1
+  while selection < 0:
+    selection = int(input())
+    if selection >= count:
+      print("select a valid option")
+      selection = -1
+  host = interfaces[selection]['IPv4']
+  uvicorn.run(app, host=host, port=8000)
+
