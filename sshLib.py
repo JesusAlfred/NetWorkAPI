@@ -12,6 +12,13 @@ class SSHController:
       self.password = password
 
     def startConection(self):
+      self.ssh = paramiko.SSHClient()
+
+      # Load SSH host keys.
+      self.ssh.load_system_host_keys()
+      # Add SSH host key automatically if needed.
+      self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+      # Connect to router using username/password authentication.
       try:
         self.ssh.connect(self.ip, 
                     username=self.user, 
