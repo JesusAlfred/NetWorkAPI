@@ -48,9 +48,9 @@ def startConnection(ip: str, user: str, password: str):
   responce['msg'] = "none"
   return responce
 
-@app.get("/sendCommand")
+@app.post("/sendCommand")
 def sendCommand(commad: str):
-  commad = commad.replace('-', ' ')
+  #commad = commad.replace('-', ' ')
   commad = commad+'\n'
   responce = {}
   print(commad)
