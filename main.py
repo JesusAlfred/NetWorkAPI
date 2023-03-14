@@ -47,14 +47,14 @@ def startConnection(ip: str, user: str, password: str):
     return response
   
   sshObj.sendCommand("enable\n")
-  sshObj.sendCommand("pass\n")
+  sshObj.sendCommand("admin\n")
   sshObj.sendCommand("terminal lengt 0\n")
+  sshObj.sendCommand("exit\n")
   response['msg'] = "true"
   return response
 
 @app.post("/sendCommand/")
 def sendCommand(c: Command):
-  #commad = commad.replace('-', ' ')
   c.command = c.command+'\n'
   response = {}
   print(c.command)
