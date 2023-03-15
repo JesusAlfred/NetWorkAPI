@@ -27,9 +27,9 @@ def test():
 @app.get("/updateDevicesList")
 def updateDevicesList(initialRouter: str, user: str, password: str, enablep:str = ""):
   tempSSHObj = sshLib.SSHController(initialRouter, user, password)
-  sshObj.sendCommand("enable\n")
-  sshObj.sendCommand(enablep + "\n")
-  sendCommand("terminal len 0\n")
+  tempSSHObj.sendCommand("enable\n")
+  tempSSHObj.sendCommand(enablep + "\n")
+  tempSSHObj.sendCommand("terminal len 0\n")
   out = tempSSHObj.sendCommand("show cdp neighbors")
   print(out)
 
