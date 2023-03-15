@@ -25,7 +25,7 @@ def test():
   print("is working")
 
 @app.get("/updateDevicesList")
-def updateDevicesList(initialRouter: str, user: str, password: str, enablep:str = ""):
+async def updateDevicesList(initialRouter: str, user: str, password: str, enablep:str = ""):
   tempSSHObj = sshLib.SSHController(initialRouter, user, password)
   tempSSHObj.sendCommand("enable\n")
   tempSSHObj.sendCommand(enablep + "\n")
@@ -57,7 +57,7 @@ def startConnection(ip: str, user: str, password: str, enablep: str):
   
   sshObj.sendCommand("enable\n")
   sshObj.sendCommand(enablep + "\n")
-  sendCommand("terminal len 0\n")
+  sshObj.sendCommand("terminal len 0\n")
   response['msg'] = "true"
   return response
 
