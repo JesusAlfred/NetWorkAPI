@@ -24,6 +24,15 @@ app.add_middleware(
 def test():
   print("is working")
 
+@app.get("updateDevicesList")
+def updateDevicesList(initialRouter: str, user: str, password: str, enablep:str = ""):
+  tempSSHObj = sshLib.SSHController(initialRouter, user, password)
+  sshObj.sendCommand("enable\n")
+  sshObj.sendCommand(enablep + "\n")
+  sendCommand("terminal len 0\n")
+  out = tempSSHObj.sendCommand("show cdp neighbors")
+  print(out)
+
 @app.get("/ping")
 def ping(ip: str):
   print("ping to:", ip)
@@ -48,6 +57,7 @@ def startConnection(ip: str, user: str, password: str, enablep: str):
   
   sshObj.sendCommand("enable\n")
   sshObj.sendCommand(enablep + "\n")
+  sendCommand("terminal len 0\n")
   response['msg'] = "true"
   return response
 
