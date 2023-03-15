@@ -37,7 +37,7 @@ def ping(ip: str):
 
 #@app.post("/startConnection") temporaly get
 @app.get("/startConnection")
-def startConnection(ip: str, user: str, password: str):
+def startConnection(ip: str, user: str, password: str, enablep: str):
   global sshObj
   response = {}
   response['operation'] = 'startConnection'
@@ -47,9 +47,8 @@ def startConnection(ip: str, user: str, password: str):
     return response
   
   sshObj.sendCommand("enable\n")
-  sshObj.sendCommand("admin\n")
+  sshObj.sendCommand(enablep + "\n")
   sshObj.sendCommand("terminal lengt 0\n")
-  sshObj.sendCommand("exit\n")
   response['msg'] = "true"
   return response
 
