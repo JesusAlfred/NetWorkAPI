@@ -24,7 +24,7 @@ app.add_middleware(
 def test():
   print("is working")
 
-@app.get("updateDevicesList")
+@app.get("/updateDevicesList")
 def updateDevicesList(initialRouter: str, user: str, password: str, enablep:str = ""):
   tempSSHObj = sshLib.SSHController(initialRouter, user, password)
   sshObj.sendCommand("enable\n")
