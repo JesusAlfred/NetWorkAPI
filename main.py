@@ -48,7 +48,6 @@ def startConnection(ip: str, user: str, password: str, enablep: str):
   
   sshObj.sendCommand("enable\n")
   sshObj.sendCommand(enablep + "\n")
-  sshObj.sendCommand("terminal lengt 0\n")
   response['msg'] = "true"
   return response
 
