@@ -33,10 +33,10 @@ def addDev(devices, deviceId, devicesVisisted, ip, user, password, enablep):
   tempSSHObj = sshLib.SSHController(ip, user, password, internhost)
   if tempSSHObj.startConection() == 1:
     raise HTTPException(status_code=404, detail="Error connecting to " + ip)
-  tempSSHObj.sendCommand("enable\n")
-  tempSSHObj.sendCommand(enablep + "\n")
-  out = tempSSHObj.sendCommand("show cdp neighbors detail | include (Device ID|IP address|Interface): [^ ]+\n").split('\n')[1:-1]
-  interfaces = tempSSHObj.sendCommand("show ip interface brief | exclude unassigned\n").split('\n')[2:-1]
+  tempSSHObj.sendCommand("enable\n", 0.1)
+  tempSSHObj.sendCommand(enablep + "\n", 0.1)
+  out = tempSSHObj.sendCommand("show cdp neighbors detail | include (Device ID|IP address|Interface): [^ ]+\n", 0.1).split('\n')[1:-1]
+  interfaces = tempSSHObj.sendCommand("show ip interface brief | exclude unassigned\n", 0.1).split('\n')[2:-1]
   tempSSHObj.endConnection()
   interacesDic = {}
   print(interfaces)

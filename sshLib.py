@@ -37,7 +37,7 @@ class SSHController:
         return 1
       return 0
 
-    def sendCommand(self, command, timeout=1):
+    def sendCommand(self, command, timeout=0):
       self.remote_conn.settimeout(1)
       if self.remote_conn.recv_ready():
         while True:
