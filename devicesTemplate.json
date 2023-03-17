@@ -1,0 +1,31 @@
+{
+  "operation": "getDevisesList",
+  "response": {
+      "R1":{
+        "interfaces": {
+          "ethernet 0/0": "192.168.1.1",
+          "ethernet 1/0": "192.168.1.1"
+        },
+        "ssh": true,
+        "protocolos":{
+          "eigrp": false,
+          "ospf": false,
+          "rip": false,
+          "bgp": false
+        }
+      },
+      "R2":{
+        "interfaces": {
+          "ethernet 0/0": "192.168.1.1",
+          "ethernet 1/0": "192.168.1.1"
+        },
+        "ssh": true,
+        "protocolos":{
+          "eigrp": false,
+          "ospf": false,
+          "rip": false,
+          "bgp": false
+        }
+      }
+    }
+}

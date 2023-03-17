@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 import sshLib
 import uvicorn
+import shutil
 
 class Command(BaseModel):
     command: str
@@ -24,14 +25,52 @@ app.add_middleware(
 def test():
   print("is working")
 
-@app.get("/updateDevicesList")
-async def updateDevicesList(initialRouter: str, user: str, password: str, enablep:str = ""):
-  tempSSHObj = sshLib.SSHController(initialRouter, user, password)
+def addDev(devices, deviceId, devicesVisisted, ip, user, password, enablep):
+  if deviceId in devicesVisisted:
+    return
+  else:
+    devicesVisisted.append(deviceId)
+  tempSSHObj = sshLib.SSHController(ip, user, password, internhost)
+  if tempSSHObj.startConection() == 1:
+    raise HTTPException(status_code=404, detail="Error connecting to " + ip)
   tempSSHObj.sendCommand("enable\n")
   tempSSHObj.sendCommand(enablep + "\n")
-  tempSSHObj.sendCommand("terminal len 0\n")
-  out = tempSSHObj.sendCommand("show cdp neighbors")
-  print(out)
+  out = tempSSHObj.sendCommand("show cdp neighbors detail | include (Device ID|IP address|Interface): [^ ]+\n").split('\n')[1:-1]
+  interfaces = tempSSHObj.sendCommand("show ip interface brief | exclude unassigned\n").split('\n')[2:-1]
+  tempSSHObj.endConnection()
+  interacesDic = {}
+  print(interfaces)
+  for t in interfaces:
+    print(t)
+    info = t.split()
+    interacesDic[info[0].strip()] = info[1].strip()
+  if deviceId != 'nop':
+    devices[deviceId]= {'interfaces':interacesDic, 'ssh': "true"}
+  for i in range(0, len(out), 3):
+    devId = out[i].split(':')[1].strip()
+    devIp = out[i+1].split(':')[1].strip()
+    devIn = out[i+2].split(',')[0].split(':')[1].strip()
+    print(devId, devIp, devIn)
+    print(devices)
+    addDev(devices, devId, devicesVisisted, devIp, user, password, enablep)
+  return
+
+@app.get("/updateDevicesList")
+def updateDevicesList(initialRouter: str, user: str, password: str, enablep:str):
+  print("updateDevicesList")
+  dir = "./data"
+  try:
+    os.mkdir(dir)
+  except Exception as e:
+    shutil.rmtree(dir)
+    os.mkdir(dir)
+  devices = {}
+  devicesVisisted = []
+  addDev(devices, "nop", devicesVisisted, initialRouter, user, password, enablep)
+  response = {}
+  response['operation'] = 'updateDeviceList'
+  response['msg'] = devices
+  return response
 
 @app.get("/ping")
 def ping(ip: str):
@@ -50,10 +89,9 @@ def startConnection(ip: str, user: str, password: str, enablep: str):
   global sshObj
   response = {}
   response['operation'] = 'startConnection'
-  sshObj = sshLib.SSHController(ip, user, password)
+  sshObj = sshLib.SSHController(ip, user, password, internhost)
   if sshObj.startConection() == 1:
-    response['msg'] = "Error on connection"
-    return response
+    raise HTTPException(status_code=404, detail="Error connecting to " + ip)
   
   sshObj.sendCommand("enable\n")
   sshObj.sendCommand(enablep + "\n")
@@ -95,6 +133,7 @@ def toValidKey(s):
 
 if __name__ == '__main__':
   import netifaces
+  global internhost 
   interfaces = []
   print("Select interface to run the API")
   count = 0
@@ -116,5 +155,13 @@ if __name__ == '__main__':
       print("select a valid option")
       selection = -1
   host = interfaces[selection]['IPv4']
+  print("Select intern interface to run the API")
+  selection = -1
+  while selection < 0:
+    selection = int(input())
+    if selection >= count:
+      print("select a valid option")
+      selection = -1
+  internhost = interfaces[selection]['IPv4']
   uvicorn.run(app, host=host, port=8000)
 
