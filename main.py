@@ -46,6 +46,7 @@ def addDev(devices, deviceId, devicesVisisted, ip, user, password, enablep):
     interacesDic[info[0].strip()] = info[1].strip()
   if deviceId != 'nop':
     devices[deviceId]= {'interfaces':interacesDic, 'ssh': "true"}
+    devices[deviceId]= {'interfaces':interacesDic, 'hostname': deviceId.split('.')[0]}
   for i in range(0, len(out), 3):
     devId = out[i].split(':')[1].strip()
     devIp = out[i+1].split(':')[1].strip()
