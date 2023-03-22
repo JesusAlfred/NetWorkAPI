@@ -37,7 +37,7 @@ class SSHController:
         return 1
       return 0
 
-    def sendCommand(self, command, timeout=0):
+    def sendCommand(self, command, timeout=0.5):
       self.remote_conn.settimeout(1)
       if self.remote_conn.recv_ready():
         while True:
@@ -56,7 +56,7 @@ class SSHController:
           #print("timeout")
           break
         output += temp_output
-      #print(output)
+      print(output)
       return output
     
     def endConnection(self):
