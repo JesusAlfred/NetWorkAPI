@@ -29,6 +29,7 @@ def addDev(devices, deviceId, devicesVisisted, ip, user, password, enablep):
   if deviceId in devicesVisisted:
     return
   else:
+    print("In router -----------------",deviceId)
     devicesVisisted.append(deviceId)
   tempSSHObj = sshLib.SSHController(ip, user, password, internhost)
   if tempSSHObj.startConection() == 1:
@@ -39,9 +40,7 @@ def addDev(devices, deviceId, devicesVisisted, ip, user, password, enablep):
   interfaces = tempSSHObj.sendCommand("show ip interface brief | exclude unassigned\n", 0.1).split('\n')[2:-1]
   tempSSHObj.endConnection()
   interacesDic = {}
-  print(interfaces)
   for t in interfaces:
-    print(t)
     info = t.split()
     interacesDic[info[0].strip()] = info[1].strip()
   if deviceId != 'nop':
@@ -50,8 +49,6 @@ def addDev(devices, deviceId, devicesVisisted, ip, user, password, enablep):
     devId = out[i].split(':')[1].strip()
     devIp = out[i+1].split(':')[1].strip()
     devIn = out[i+2].split(',')[0].split(':')[1].strip()
-    print(devId, devIp, devIn)
-    print(devices)
     addDev(devices, devId, devicesVisisted, devIp, user, password, enablep)
   return
 
