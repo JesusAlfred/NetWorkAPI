@@ -1,0 +1,1 @@
+https://networkengineerstuff.blogspot.com/2020/08/add-your-own-local-pc-in-gns3-its-easy.html
