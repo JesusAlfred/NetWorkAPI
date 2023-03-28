@@ -28,6 +28,7 @@ class SSHController:
         self.ssh.connect(self.ip, 
                     username=self.user, 
                     password=self.password,
+                    allow_agent=False,
                     look_for_keys=False,
                     sock=s )
         self.remote_conn = self.ssh.invoke_shell()
