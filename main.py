@@ -160,5 +160,5 @@ if __name__ == '__main__':
       print("select a valid option")
       selection = -1
   internhost = interfaces[selection]['IPv4']
-  uvicorn.run(app, host=host, port=8000, reload=True, ssl_keyfile="./localhost+2-key.pem", ssl_certfile="./localhost+2.pem")
+  uvicorn.run(app, host=host, port=8000, ssl_keyfile="./localhost+2-key.pem", ssl_certfile="./localhost+2.pem")
 
